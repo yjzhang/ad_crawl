@@ -23,12 +23,14 @@ def build_category_classifier(categories):
     Builds a bag-of-words logistic classifier to classify
     """
 
+URL_RE = '[a-z0-9\-\.]+\.[a-z]+'
+
 def process_url(url):
     """
     Given a url, this extracts only the 'main' part of the address.
     """
     url = url.lower()
-    m = re.search('[a-z0-9\-\.]+\.[a-z]+', url)
+    m = re.search(URL_RE, url)
     return m.group()
 
 if __name__ == '__main__':
