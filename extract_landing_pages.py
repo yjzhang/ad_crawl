@@ -40,7 +40,7 @@ def extract_ad_urls(base_dir, site_categories):
                         links.add(link)
                         links.add('.'.join(link.split('.')[-2:]))
                 site_links[site_name].extend(links)
-    with open(base_dir+'ad_site_links.pkl', 'w') as f:
+    with open(os.path.join(base_dir, 'ad_site_links.pkl'), 'w') as f:
         pickle.dump(site_links, f)
     site_link_categories = {}
     for site, links in site_links.iteritems():
@@ -53,11 +53,11 @@ def extract_ad_urls(base_dir, site_categories):
                     site_link_categories[site].append((link, category))
                 except:
                     pass
-    with open(base_dir+'ad_site_cats.pkl', 'w') as f:
+    with open(os.path.join(base_dir,'ad_site_cats.pkl'), 'w') as f:
         pickle.dump(site_link_categories, f)
 
 if __name__=='__main__':
-    base_dirs = ['Health_News', 'None_News', 'Kids and Teens_news', 'Shopping_News', 'Sports_News', 'Science_News', 'Reference_News', 'News_News']
+    base_dirs = ['Health_News', 'None_News', 'Kids and Teens_News', 'Shopping_News', 'Sports_News', 'Science_News', 'Reference_News', 'News_News']
     site_categories = pickle.load(open('site_categories.pkl'))
     for b in base_dirs:
         extract_ad_urls(b, site_categories)
