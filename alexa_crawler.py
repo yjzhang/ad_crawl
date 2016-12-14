@@ -18,20 +18,17 @@ class AlexaSpider(scrapy.Spider):
                 r.meta['link'] = link_url
                 r.meta['name'] = link_name
                 r.meta['depth'] = 1
+                r.meta['subcategories'] = True
                 yield r
 
     def parse_webpage_list(self, response):
         """
         parses something like http://www.alexa.com/topsites/category/Top/Health
         """
-        if response.meta['depth'] > 3:
-            return
-        response.meta['depth'] += 1
         links = []
         for site in response.css('li.site-listing'):
             link = site.css('p.desc-paragraph a::text').extract_first()
             links.append(link)
-        # TODO: extract which page are we on - the page number?
         page = response.css('div.alexa-pagination')
         b = page.css('b::text').extract_first()
         page_num = int(b)/25
@@ -41,14 +38,16 @@ class AlexaSpider(scrapy.Spider):
         r.meta['link'] = response.meta['link']
         r.meta['name'] = response.meta['name']
         r.meta['depth'] = response.meta['depth']
+        r.meta['subcategories'] = False
         yield r
-        # TODO: extract subcategories
-        subcategories = response.css('ul.subcategories li')
-        for category in subcategories:
-            url = category.css('a::attr("href")').extract_first()
-            category_name = category.css('a::text').extract_first()
-            r = scrapy.Request(response.urljoin(url), callback=self.parse_webpage_list)
-            r.meta['link'] = url
-            r.meta['name'] = response.meta['name'] + '-' + category_name
-            r.meta['depth'] = response.meta['depth']
-            yield r
+        if response.meta['subcategories']:
+            subcategories = response.css('ul.subcategories li')
+            for category in subcategories:
+                url = category.css('a::attr("href")').extract_first()
+                category_name = category.css('a::text').extract_first()
+                r = scrapy.Request(response.urljoin(url), callback=self.parse_webpage_list)
+                r.meta['link'] = url
+                r.meta['name'] = response.meta['name'] + '-' + category_name
+                r.meta['depth'] = response.meta['depth'] + 1
+                r.meta['subcategories'] = False
+                yield r

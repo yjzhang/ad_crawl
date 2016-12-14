@@ -34,8 +34,15 @@ def process_url(url):
     return m.group()
 
 if __name__ == '__main__':
-    with open('alexa_subcategories.json') as f:
+    """
+    This creates a mapping from categories to sites, and from sites to
+    categories.
+    """
+    with open('alexa.json') as f:
         data = json.load(f)
+    with open('alexa_subcategories_2.json') as f:
+        data2 = json.load(f)
+    data += data2
     categories = set([x['name'] for x in data])
     category_sites = {}
     site_categories = {}
