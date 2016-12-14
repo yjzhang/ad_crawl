@@ -1,11 +1,8 @@
-Crawl targets:
+Web crawling/ad analysis pipeline:
 
-which categories?
-
-science, computers, health, arts, kids and teens, sports, home, recreation, shopping, news
-
-Build a general contextual classifier model using all the categories, combined, using a bag-of-words model on the website text? or just getting each category for the website...
-
-- use the Alexa categorical websites to learn a naive Bayes text-based model for categories
-- how do you identify ads on websites? look at tags?
-- After crawling through the Alexa websites using OpenWPM, we identify all tracking cookies...
+1. use scrapy with alexa.py to gather json data
+2. use text_extractor.py to build a mapping from websites to categories
+3. use gather.py to build a user profile by browsing sites in a category
+4. use extract_ads.py to collect ads by browsing
+5. use extract_landing_pages.py to parse the ad data, collecting only the landing page urls
+6. use analysis.py
