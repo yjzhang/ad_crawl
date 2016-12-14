@@ -77,6 +77,10 @@ if __name__=='__main__':
     chi2_cats = proportions_chisquare_allpairs(ad_cats_table, ad_cats_table.sum(1))
     chi2_cats_no_rem = proportions_chisquare_allpairs(ad_cats_table_no_rem, ad_cats_table_no_rem.sum(1))
 
+    # correlation coefficient
+    ad_cats_corr = ad_cats_freq.T.corr()
+    ad_cats_corr_no_rem = ad_cats_freq_no_rem.T.corr()
+
     # create bar plots for the ads targeted in each category?
     xlab = np.arange(ad_cats_table.shape[1])
     for category in ad_cats_table.index:
@@ -116,3 +120,19 @@ if __name__=='__main__':
     plt.xticks(ylab, labels, rotation='vertical', verticalalignment='bottom')
     plt.yticks(ylab, labels)
     plt.savefig('chi2_norem.png', dpi=240)
+    plt.clf()
+
+    plt.matshow(ad_cats_corr, cmap=plt.cm.hot_r)
+    plt.colorbar()
+    plt.xticks(ylab, labels, rotation='vertical', verticalalignment='bottom')
+    plt.yticks(ylab, labels)
+    plt.subplots_adjust(bottom=0.5,left=0.5)
+    plt.savefig('corr.png', dpi=240)
+    plt.clf()
+    plt.matshow(ad_cats_corr_no_rem, cmap=plt.cm.hot_r)
+    plt.colorbar()
+    plt.xticks(ylab, labels, rotation='vertical', verticalalignment='bottom')
+    plt.yticks(ylab, labels)
+    plt.subplots_adjust(bottom=0.5,left=0.5)
+    plt.savefig('corr_norem.png', dpi=240)
+    plt.clf()
